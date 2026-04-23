@@ -20,11 +20,11 @@ const requiredFiles = [
 const missing = requiredFiles.filter((file) => !fs.existsSync(path.join(root, file)));
 
 if (missing.length > 0) {
-  console.error("Missing required foundation files:");
+  console.error("Missing required project files:");
   for (const file of missing) {
     console.error(`- ${file}`);
   }
   process.exit(1);
 }
 
-console.log("Foundation smoke test passed.");
+console.log("Project smoke test passed.");

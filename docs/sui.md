@@ -120,10 +120,10 @@ These are consumed by:
 - `apps/web/src/lib/config/sui.ts`
 
 ## zkLogin in this project
-zkLogin exists to make wallet onboarding lighter for users who should not need a traditional wallet-first flow. In this foundation it is represented as a feature flag and service interface, not a completed auth implementation.
+zkLogin exists to make wallet onboarding lighter for users who should not need a traditional wallet-first flow. In the current MVP build it is represented as a feature flag and service interface, not a completed auth implementation.
 
 ## Sponsored transactions in this project
-Sponsored transactions exist so the app can eventually cover gas for critical user actions. In this foundation they are represented by:
+Sponsored transactions exist so the app can eventually cover gas for critical user actions. In the current MVP build they are represented by:
 
 - feature flags
 - sponsor service interface

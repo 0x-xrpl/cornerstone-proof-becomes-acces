@@ -10,7 +10,7 @@
 ## Working Style
 - Use `pnpm`.
 - Prefer minimal abstractions over framework-heavy indirection.
-- Extend the current foundation instead of rewriting product definitions.
+- Extend the current implementation instead of rewriting product definitions.
 - Keep wallet, zkLogin, and sponsored transaction work subordinate to the product loop.
 - Favor working scaffolds and replaceable mocks over overdesigned infrastructure.
 

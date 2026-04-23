@@ -1,7 +1,7 @@
 # CornerStone Build Guide
 
 ## Objective
-Build the technical foundation for the CornerStone MVP so product implementation can proceed directly into UI and chain wiring.
+Build the technical base for the CornerStone MVP so product implementation can proceed directly into UI and chain wiring.
 
 ## MVP Boundaries
 - Support Proof: `Watch Check-in`, `Venue Check-in`, `Quiz Pass`
