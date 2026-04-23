@@ -1,0 +1,25 @@
+{
+  "name": "cornerstone-foundation",
+  "private": true,
+  "packageManager": "pnpm@9.15.4",
+  "engines": {
+    "node": ">=20.11.0"
+  },
+  "scripts": {
+    "dev": "corepack pnpm --filter web dev",
+    "build": "corepack pnpm --filter web build",
+    "lint": "corepack pnpm --filter web lint",
+    "typecheck": "corepack pnpm --filter web typecheck",
+    "test": "corepack pnpm --filter web test",
+    "format": "prettier --check .",
+    "format:write": "prettier --write .",
+    "sui:build": "sh ./scripts/sui-build.sh",
+    "sui:test": "sh ./scripts/sui-test.sh",
+    "sui:publish:testnet": "sh ./scripts/sui-publish-testnet.sh",
+    "sui:client:testnet": "sh ./scripts/sui-client-testnet.sh",
+    "sui:client:localnet": "sh ./scripts/sui-client-localnet.sh"
+  },
+  "devDependencies": {
+    "prettier": "^3.3.3"
+  }
+}

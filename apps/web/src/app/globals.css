@@ -1,0 +1,28 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: light;
+}
+
+html {
+  min-height: 100%;
+}
+
+body {
+  min-height: 100vh;
+  background:
+    linear-gradient(180deg, rgba(245, 188, 82, 0.1) 0%, rgba(236, 241, 238, 0.92) 40%, #f7faf8 100%),
+    #f7faf8;
+  color: #0d1b1e;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+* {
+  border-color: rgba(13, 27, 30, 0.08);
+}

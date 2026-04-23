@@ -1,0 +1,7 @@
+[package]
+name = "cornerstone"
+version = "0.0.1"
+edition = "2024.beta"
+
+[addresses]
+cornerstone = "0x0"
