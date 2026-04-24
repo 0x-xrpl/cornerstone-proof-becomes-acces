@@ -52,7 +52,7 @@ export function AccessLiveDetail({ accessId }: { accessId: string }) {
         badge={canOpen ? "Access open" : "Access gated"}
       />
 
-      <Card className="max-w-4xl">
+      <Card className="panel-metal max-w-4xl border-line/90">
         <div className="flex flex-wrap gap-3">
           <Badge tone="accent">{access.type}</Badge>
           <Badge tone={canOpen ? "success" : "default"}>
@@ -60,51 +60,51 @@ export function AccessLiveDetail({ accessId }: { accessId: string }) {
           </Badge>
         </div>
 
-        <p className="mt-5 text-base leading-7 text-ink/72">{access.description}</p>
+        <p className="mt-5 text-base leading-7 text-white/64">{access.description}</p>
 
-        <div className="mt-6 grid gap-4 text-sm text-ink/68 md:grid-cols-3">
+        <div className="mt-6 grid gap-4 text-sm text-white/52 md:grid-cols-3">
           <p>Required key: {access.keyType}</p>
           <p>Availability: {access.availability}</p>
           <p>Wallet: {account?.address ?? "Not connected"}</p>
         </div>
 
-        <div className="mt-8 rounded-[24px] border border-black/5 bg-mist/60 p-5">
+        <div className="mt-8 rounded-[24px] border border-line bg-black/22 p-5">
           {canOpen ? (
             <>
-              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-coral">
+              <p className="eyebrow-label">
                 Access live
               </p>
-              <h3 className="mt-3 text-2xl font-semibold text-ink">
+              <h3 className="mt-4 text-[1.9rem] font-semibold tracking-[-0.04em] text-white">
                 Your key is valid. This access is open.
               </h3>
-              <p className="mt-3 text-sm leading-6 text-ink/72">
+              <p className="mt-3 text-sm leading-7 text-white/64">
                 This is the point where the MVP moves from proof and key logic into
                 actual access. The key is not just displayed; it gates the route.
               </p>
-              <div className="mt-5 rounded-[20px] bg-white p-4">
-                <p className="text-xs font-semibold uppercase tracking-[0.2em] text-coral">
+              <div className="mt-5 rounded-[20px] border border-line bg-black/30 p-4">
+                <p className="eyebrow-label">
                   Live moment
                 </p>
-                <p className="mt-2 text-sm leading-6 text-ink/72">
+                <p className="mt-2 text-sm leading-7 text-white/64">
                   Access granted. This is where the user should feel the product
                   changed something now, not later.
                 </p>
               </div>
               {requiredKey?.expiresAt ? (
-                <p className="mt-4 text-sm text-coral">
+                <p className="mt-4 text-sm text-metal">
                   Countdown: {formatCountdown(requiredKey.expiresAt)}
                 </p>
               ) : null}
             </>
           ) : (
             <>
-              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-coral">
+              <p className="eyebrow-label">
                 Access gated
               </p>
-              <h3 className="mt-3 text-2xl font-semibold text-ink">
+              <h3 className="mt-4 text-[1.9rem] font-semibold tracking-[-0.04em] text-white">
                 Unlock the required key first.
               </h3>
-              <p className="mt-3 text-sm leading-6 text-ink/72">
+              <p className="mt-3 text-sm leading-7 text-white/64">
                 {!templateActive
                   ? "This access path is currently disabled in the athlete console."
                   : account?.address

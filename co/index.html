@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CornerStone | Dashboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Teko:wght@400;500;600;700&family=Roboto+Condensed:wght@300;400;500;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="./app.css" />
+  </head>
+  <body data-page="dashboard">
+    <main class="pixel-page page-dashboard" aria-label="CornerStone dashboard">
+      <div class="wallet-cover" data-wallet-cover>
+        <button type="button" data-connect><span></span><b>Wallet Connect</b><small>Not connected</small></button>
+        <em>⌁ Live Wallet Mode</em>
+      </div>
+      <div class="dashboard-nav-fix"></div>
+      <div class="dashboard-image-patch dashboard-proof-inactive-patch" aria-hidden="true"></div>
+      <div class="dashboard-image-patch dashboard-wallet-connect-patch" data-dashboard-wallet-patch aria-hidden="true"></div>
+      <nav class="hot-nav" aria-label="Primary">
+        <a class="nav-hot dashboard-hot active" href="./"></a>
+        <a class="nav-hot proof-hot" href="./proof/"></a>
+        <a class="nav-hot access-hot" href="./access/"></a>
+        <a class="nav-hot squad-hot" href="./squad/"></a>
+        <button class="nav-hot console-hot" type="button" data-modal-trigger="console"></button>
+        <button class="nav-hot wallet-hot" type="button" data-connect></button>
+      </nav>
+      <a class="hot-card dash-watch" href="./proof/#watch-checkin"></a>
+      <a class="hot-card dash-venue" href="./proof/#venue-checkin"></a>
+      <a class="hot-card dash-quiz" href="./proof/#quiz-pass"></a>
+      <a class="hot-card dash-ama" href="./access/#corner-ama"></a>
+      <a class="hot-card dash-merch" href="./access/#priority-merch"></a>
+      <a class="hot-card dash-arena" href="./access/#arena-access"></a>
+      <a class="hot-card dash-event" href="./squad/#event-limited"></a>
+      <a class="hot-card dash-squad" href="./squad/"></a>
+      <a class="hot-card dash-console-ama" href="./access/#corner-ama"></a>
+      <a class="hot-card dash-console-merch" href="./access/#priority-merch"></a>
+      <a class="hot-card dash-console-arena" href="./access/#arena-access"></a>
+    </main>
+    <dialog class="cs-modal" data-modal><div><h2 data-modal-title></h2><p data-modal-body></p><button type="button" data-close-modal>Continue</button></div></dialog>
+    <script src="./app.js"></script>
+  </body>
+</html>

@@ -1,0 +1,9 @@
+node_modules
+.next
+.move
+contracts/cornerstone/build
+coverage
+dist
+build
+.git
+.DS_Store

@@ -71,16 +71,16 @@ export function DemoStatusStrip() {
       : "Open AMA access";
 
   return (
-    <Card className="max-w-6xl">
+    <Card className="panel-metal max-w-6xl border-line/90">
       <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
         <div>
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-coral">
+          <p className="eyebrow-label">
             30-second demo
           </p>
-          <h3 className="mt-3 text-2xl font-semibold text-ink">
+          <h3 className="mt-4 text-[1.9rem] font-semibold tracking-[-0.04em] text-white">
             Support becomes access in four visible steps
           </h3>
-          <p className="mt-3 max-w-3xl text-sm leading-6 text-ink/72">
+          <p className="mt-3 max-w-3xl text-sm leading-6 text-white/64">
             Keep the story narrow: connect, recognize support, unlock the AMA key,
             then open the access route.
           </p>
@@ -98,15 +98,15 @@ export function DemoStatusStrip() {
         {steps.map((step) => (
           <div
             key={step.label}
-            className="rounded-[22px] border border-black/5 bg-mist/50 p-4"
+            className="rounded-[22px] border border-line bg-black/20 p-4"
           >
             <div className="flex items-center gap-2">
               {step.done ? (
-                <CheckCircle2 className="size-4 text-pine" />
+                <CheckCircle2 className="size-4 text-[#9dc69a]" />
               ) : (
-                <Circle className="size-4 text-ink/35" />
+                <Circle className="size-4 text-white/28" />
               )}
-              <p className="text-sm font-medium text-ink">{step.label}</p>
+              <p className="text-sm font-medium text-white/84">{step.label}</p>
             </div>
           </div>
         ))}

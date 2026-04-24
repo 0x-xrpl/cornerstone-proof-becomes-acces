@@ -12,3 +12,4 @@ coverage
 apps/web/.env.local
 contracts/cornerstone/build
 *.tsbuildinfo
+.vercel

@@ -17,7 +17,7 @@ export function ConsoleLivePanel() {
         description="This console stays intentionally narrow. It lets an athlete, camp, or organizer enable the next access path without introducing a heavy admin backend."
       />
 
-      <Card className="max-w-4xl text-sm leading-7 text-ink/72">
+      <Card className="panel-metal max-w-4xl border-line/90 text-sm leading-7 text-white/64">
         The console is local-first in this MVP build. Template activation is
         stored in the browser so the product loop can demonstrate who gets to enable
         the next layer of access before a real service layer is added.

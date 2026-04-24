@@ -16,8 +16,8 @@ export default function WalletPage() {
       />
       <WalletStatusCard />
       <WalletNextStepCard />
-      <Card className="max-w-3xl">
-        <p className="text-sm leading-7 text-ink/72">
+      <Card className="panel-metal max-w-3xl border-line/90">
+        <p className="text-sm leading-7 text-white/60">
           Current wallet mode: {walletService.walletMode()}. zkLogin enabled:{" "}
           {walletService.zkLoginEnabled() ? "Yes" : "No"}.
         </p>

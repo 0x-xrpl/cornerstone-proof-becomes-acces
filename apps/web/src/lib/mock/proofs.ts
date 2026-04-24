@@ -25,9 +25,9 @@ export const proofs: SupportProof[] = [
     id: "proof-venue",
     type: "venue-check-in",
     label: "Venue Check-in",
-    description: "Reserved for in-venue recognition during the live event.",
-    status: "available",
-    earnedAt: null,
+    description: "Recognized for in-venue check-in during the live event.",
+    status: "recognized",
+    earnedAt: "2026-04-23T18:36:00.000Z",
     athleteId: "ath-1",
     eventId: "event-tokyo-2026"
   }

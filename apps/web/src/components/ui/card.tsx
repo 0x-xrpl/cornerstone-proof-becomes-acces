@@ -9,7 +9,7 @@ export function Card({
   return (
     <section
       className={cn(
-        "rounded-[28px] border border-black/5 bg-white/90 p-6 shadow-panel backdrop-blur",
+        "panel-dark relative overflow-hidden rounded-[28px] p-6 shadow-panel backdrop-blur",
         className
       )}
     >

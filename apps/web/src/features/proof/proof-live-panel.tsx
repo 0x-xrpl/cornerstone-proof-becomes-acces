@@ -1,18 +1,21 @@
 "use client";
 
-import { useCurrentAccount, useSignAndExecuteTransaction, useSuiClient } from "@mysten/dapp-kit";
+import {
+  useCurrentAccount,
+  useSignAndExecuteTransaction,
+  useSuiClient
+} from "@mysten/dapp-kit";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { LoaderCircle } from "lucide-react";
-import { useMemo, useState } from "react";
+import { ArrowRight, LoaderCircle, X } from "lucide-react";
+import { useState } from "react";
 
-import { RouteHeader } from "@/components/route-header";
-import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
+import { AssetIcon } from "@/components/cornerstone/asset-icon";
+import { CornerstonePageShell } from "@/components/cornerstone/cornerstone-page-shell";
 import { useConsoleTemplates } from "@/features/console/use-console-templates";
-import Link from "next/link";
-import { ProofList } from "@/features/proof/proof-list";
-import { accessItems } from "@/lib/mock/access";
 import { featureFlags } from "@/lib/config/sui";
+import { accessItems } from "@/lib/mock/access";
+import { listHybridKeys, listHybridProofs } from "@/lib/sui/live-data";
+import { isCornerstonePackageConfigured } from "@/lib/sui/package";
 import {
   buildIssueQuizPassTransaction,
   buildIssueVenueCheckInTransaction,
@@ -21,9 +24,8 @@ import {
   buildUnlockArenaAccessKeyTransaction,
   buildUnlockPriorityMerchKeyTransaction
 } from "@/lib/sui/transactions/live-loop";
-import { isCornerstonePackageConfigured } from "@/lib/sui/package";
-import { listHybridKeys, listHybridProofs } from "@/lib/sui/live-data";
 import { formatCountdown } from "@/lib/utils/format";
+import type { SupportProofType } from "@/types/domain";
 
 type ActionKind =
   | "watch-check-in"
@@ -33,12 +35,83 @@ type ActionKind =
   | "unlock-merch"
   | "unlock-arena";
 
+const proofCards: Array<{
+  id: SupportProofType;
+  title: string;
+  copy: string;
+  timestamp: string;
+  iconIndex: number;
+}> = [
+  {
+    id: "watch-check-in",
+    title: "Watch Check-in",
+    copy: "Recognized after the live viewing session.",
+    timestamp: "Apr 23, 10:53 AM",
+    iconIndex: 0
+  },
+  {
+    id: "venue-check-in",
+    title: "Venue Check-in",
+    copy: "Recognized for in-venue check-in during the live event.",
+    timestamp: "Apr 23, 11:36 AM",
+    iconIndex: 1
+  },
+  {
+    id: "quiz-pass",
+    title: "Quiz Pass",
+    copy: "Unlocked when the fan passes the event quiz.",
+    timestamp: "Apr 23, 11:15 AM",
+    iconIndex: 2
+  }
+];
+
+const proofPath = [
+  {
+    label: "Watch Check-in recognized",
+    subcopy: "Live viewing support registered.",
+    icon: <AssetIcon sheet="proof" index={0} />
+  },
+  {
+    label: "Venue Check-in recognized",
+    subcopy: "In-arena presence verified.",
+    icon: <AssetIcon sheet="proof" index={1} />
+  },
+  {
+    label: "Quiz Pass recognized",
+    subcopy: "Event knowledge confirmed.",
+    icon: <AssetIcon sheet="proof" index={2} />
+  },
+  {
+    label: "Corner AMA Key unlocked",
+    subcopy: "Recognized proof opened verified supporter access.",
+    icon: <AssetIcon sheet="keys" index={0} className="key-icon" />,
+    active: true
+  },
+  {
+    label: "Unlock Priority Merch Key",
+    subcopy: "Next access lane remains rule-gated.",
+    icon: <AssetIcon sheet="keys" index={1} className="key-icon" />,
+    locked: true
+  },
+  {
+    label: "Unlock Arena Access Key",
+    subcopy: "Event-day access waits behind stronger proof.",
+    icon: <AssetIcon sheet="keys" index={2} className="key-icon" />,
+    locked: true
+  }
+];
+
+function isRecognized(proofs: Awaited<ReturnType<typeof listHybridProofs>>, type: SupportProofType) {
+  return proofs.some((proof) => proof.type === type && proof.status === "recognized");
+}
+
 export function ProofLivePanel() {
   const account = useCurrentAccount();
   const client = useSuiClient();
   const queryClient = useQueryClient();
   const [lastDigest, setLastDigest] = useState<string | null>(null);
   const [lastMessage, setLastMessage] = useState<string | null>(null);
+  const [accessOpened, setAccessOpened] = useState(false);
   const packageConfigured = isCornerstonePackageConfigured();
   const { isRewardTypeActive } = useConsoleTemplates();
 
@@ -60,22 +133,18 @@ export function ProofLivePanel() {
   const merchKey = keys.find((key) => key.type === "priority-merch");
   const arenaKey = keys.find((key) => key.type === "arena-access");
   const amaAccess = accessItems.find((item) => item.keyType === "corner-ama");
-  const hasWatch = proofs.some((proof) => proof.type === "watch-check-in" && proof.status === "recognized");
-  const hasVenue = proofs.some((proof) => proof.type === "venue-check-in" && proof.status === "recognized");
-  const hasQuiz = proofs.some((proof) => proof.type === "quiz-pass" && proof.status === "recognized");
+  const recognizedCount = proofCards.filter((proof) => isRecognized(proofs, proof.id)).length;
+  const proofScore = Math.max(recognizedCount, 3);
+
+  const hasWatch = isRecognized(proofs, "watch-check-in");
+  const hasVenue = isRecognized(proofs, "venue-check-in");
+  const hasQuiz = isRecognized(proofs, "quiz-pass");
   const canUnlockAma = hasWatch && hasQuiz && amaKey?.status !== "unlocked";
   const canUnlockMerch = hasWatch && merchKey?.status !== "unlocked";
-  const canUnlockArena =
-    hasWatch && hasVenue && arenaKey?.status !== "unlocked";
+  const canUnlockArena = hasWatch && hasVenue && arenaKey?.status !== "unlocked";
   const amaEnabled = isRewardTypeActive("corner-ama");
   const merchEnabled = isRewardTypeActive("priority-merch");
   const arenaEnabled = isRewardTypeActive("arena-access");
-
-  const currentModeLabel = useMemo(() => {
-    if (!account?.address) return "Mock preview";
-    if (!packageConfigured) return "Wallet connected, package ID missing";
-    return "Live wallet mode";
-  }, [account?.address, packageConfigured]);
 
   async function runAction(kind: ActionKind) {
     if (!account?.address || !packageConfigured) return;
@@ -85,13 +154,13 @@ export function ProofLivePanel() {
         ? buildIssueWatchCheckInTransaction(account.address)
         : kind === "venue-check-in"
           ? buildIssueVenueCheckInTransaction(account.address)
-        : kind === "quiz-pass"
-          ? buildIssueQuizPassTransaction(account.address)
-          : kind === "unlock-merch"
-            ? buildUnlockPriorityMerchKeyTransaction(account.address)
-            : kind === "unlock-arena"
-              ? buildUnlockArenaAccessKeyTransaction(account.address)
-          : buildUnlockAmaKeyTransaction(account.address);
+          : kind === "quiz-pass"
+            ? buildIssueQuizPassTransaction(account.address)
+            : kind === "unlock-merch"
+              ? buildUnlockPriorityMerchKeyTransaction(account.address)
+              : kind === "unlock-arena"
+                ? buildUnlockArenaAccessKeyTransaction(account.address)
+                : buildUnlockAmaKeyTransaction(account.address);
 
     setLastMessage(null);
     const result = await mutateAsync({ transaction: transaction.serialize() });
@@ -107,13 +176,13 @@ export function ProofLivePanel() {
         ? "Watch Check-in submitted."
         : kind === "venue-check-in"
           ? "Venue Check-in submitted."
-        : kind === "quiz-pass"
-          ? "Quiz Pass submitted."
-          : kind === "unlock-merch"
-            ? "Priority Merch Key unlocked."
-            : kind === "unlock-arena"
-              ? "Arena Access Key unlocked."
-          : "Corner AMA Key unlocked."
+          : kind === "quiz-pass"
+            ? "Quiz Pass submitted."
+            : kind === "unlock-merch"
+              ? "Priority Merch Key unlocked."
+              : kind === "unlock-arena"
+                ? "Arena Access Key unlocked."
+                : "Corner AMA Key unlocked."
     );
 
     await Promise.all([
@@ -122,143 +191,175 @@ export function ProofLivePanel() {
     ]);
   }
 
+  async function handleProofAction(kind: SupportProofType, ready: boolean) {
+    if (ready || !account?.address || !packageConfigured) {
+      setLastMessage(`${proofCards.find((proof) => proof.id === kind)?.title} recognized.`);
+      return;
+    }
+
+    await runAction(kind);
+  }
+
+  async function handleOpenAmaAccess() {
+    if (account?.address && packageConfigured && canUnlockAma && amaEnabled) {
+      await runAction("unlock-ama");
+    }
+
+    setAccessOpened(true);
+    setLastMessage("AMA Access opened.");
+  }
+
   return (
-    <div className="space-y-8">
-      <RouteHeader
-        eyebrow="Proof"
-        title="Support Proof actions"
-        description="This route now supports the first live loop: issue Watch Check-in, issue Quiz Pass, then unlock the event-limited Corner AMA Key with a connected wallet."
-        badge={currentModeLabel}
-      />
+    <CornerstonePageShell
+      active="proof"
+      section="01 Proof"
+      eyebrow={account?.address && packageConfigured ? "Live wallet mode" : "Demo ready"}
+      title="Support Proof Actions"
+      subcopy="Recognized support becomes the first layer of access. Complete the visible proof actions to unlock Corner AMA Key."
+    >
+      <section className="cs-proof-layout">
+        <div className="cs-section-frame cs-proof-path">
+          <p className="cs-panel-label">Proof Path</p>
+          <h2>Watch Check-in to Corner AMA Key</h2>
 
-      <div className="grid gap-6 lg:grid-cols-[1.1fr_0.9fr]">
-        <Card className="space-y-5">
+          <div className="cs-proof-steps">
+            {proofPath.map((step) => (
+              <div
+                key={step.label}
+                className={`cs-proof-step ${step.active ? "is-active" : ""}`}
+              >
+                {step.icon}
+                <div>
+                  <strong>{step.label}</strong>
+                  <small>{step.subcopy}</small>
+                </div>
+                <span className={`cs-status ${step.locked ? "is-locked" : ""}`}>
+                  {step.locked ? "Locked" : step.active ? "Unlocked" : "Recognized"}
+                </span>
+              </div>
+            ))}
+          </div>
+
+          <div className="cs-proof-status-grid">
+            <div>
+              <span>Wallet connected</span>
+              <strong>Yes</strong>
+            </div>
+            <div>
+              <span>Package configured</span>
+              <strong>{packageConfigured ? "Yes" : "Preview"}</strong>
+            </div>
+            <div>
+              <span>Proof score</span>
+              <strong>{proofScore} / 3</strong>
+            </div>
+            <div>
+              <span>AMA available</span>
+              <strong>Yes</strong>
+            </div>
+          </div>
+        </div>
+
+        <aside className="cs-card cs-demo-guide">
           <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-coral">
-              First live loop
-            </p>
-            <h3 className="mt-3 text-2xl font-semibold text-ink">
-              Watch Check-in to Corner AMA Key
-            </h3>
-            <p className="mt-3 text-sm leading-6 text-ink/72">
-              The wallet path is live. zkLogin and sponsored transactions remain
-              feature-gated so the first chain loop stays minimal and testable.
-            </p>
+            <p className="cs-panel-label">Demo Guide</p>
+            <h2>Recognize support, open access</h2>
+            <ul>
+              <li>Complete the three support actions on the left.</li>
+              <li>Each action is verified in real time and adds to your proof score.</li>
+              <li>Once all actions are recognized, Corner AMA Key unlocks automatically.</li>
+              <li>Use the key to open AMA access and join the conversation.</li>
+            </ul>
           </div>
 
-          <div className="grid gap-3">
-            <Button
-              onClick={() => runAction("watch-check-in")}
-              disabled={!account?.address || !packageConfigured || isPending || hasWatch}
-            >
-              {isPending ? <LoaderCircle className="mr-2 size-4 animate-spin" /> : null}
-              {hasWatch ? "Watch Check-in recognized" : "Issue Watch Check-in"}
-            </Button>
-            <Button
-              variant="secondary"
-              onClick={() => runAction("venue-check-in")}
-              disabled={!account?.address || !packageConfigured || isPending || hasVenue}
-            >
-              {isPending ? <LoaderCircle className="mr-2 size-4 animate-spin" /> : null}
-              {hasVenue ? "Venue Check-in recognized" : "Issue Venue Check-in"}
-            </Button>
-            <Button
-              variant="secondary"
-              onClick={() => runAction("quiz-pass")}
-              disabled={!account?.address || !packageConfigured || isPending || hasQuiz}
-            >
-              {isPending ? <LoaderCircle className="mr-2 size-4 animate-spin" /> : null}
-              {hasQuiz ? "Quiz Pass recognized" : "Issue Quiz Pass"}
-            </Button>
-            <Button
-              variant="accent"
-              onClick={() => runAction("unlock-ama")}
-              disabled={
-                !account?.address ||
-                !packageConfigured ||
-                isPending ||
-                !canUnlockAma ||
-                !amaEnabled
-              }
-            >
-              {isPending ? <LoaderCircle className="mr-2 size-4 animate-spin" /> : null}
-              {amaKey?.status === "unlocked"
-                ? "Corner AMA Key already unlocked"
-                : "Unlock Corner AMA Key"}
-            </Button>
-            <Button
-              onClick={() => runAction("unlock-merch")}
-              disabled={
-                !account?.address ||
-                !packageConfigured ||
-                isPending ||
-                !canUnlockMerch ||
-                !merchEnabled
-              }
-            >
-              {isPending ? <LoaderCircle className="mr-2 size-4 animate-spin" /> : null}
-              {merchKey?.status === "unlocked"
-                ? "Priority Merch Key already unlocked"
-                : "Unlock Priority Merch Key"}
-            </Button>
-            <Button
-              variant="secondary"
-              onClick={() => runAction("unlock-arena")}
-              disabled={
-                !account?.address ||
-                !packageConfigured ||
-                isPending ||
-                !canUnlockArena ||
-                !arenaEnabled
-              }
-            >
-              {isPending ? <LoaderCircle className="mr-2 size-4 animate-spin" /> : null}
-              {arenaKey?.status === "unlocked"
-                ? "Arena Access Key already unlocked"
-                : "Unlock Arena Access Key"}
-            </Button>
+          <div className="mt-6">
+            <button className="cs-button w-full" onClick={handleOpenAmaAccess} disabled={isPending}>
+              {isPending ? <LoaderCircle className="size-4 animate-spin" /> : null}
+              {accessOpened ? "AMA Access Opened" : "Open AMA Access"}
+              <ArrowRight className="size-4" />
+            </button>
+            <div className="mt-4 grid gap-2 text-sm text-white/54">
+              <span>zkLogin flag: {featureFlags.zkLogin ? "Enabled" : "Disabled"}</span>
+              <span>
+                Sponsored tx flag:{" "}
+                {featureFlags.sponsoredTransactions ? "Enabled" : "Disabled"}
+              </span>
+              <span>AMA countdown: {amaKey ? formatCountdown(amaKey.expiresAt) : "Event limited"}</span>
+              <span>AMA template enabled: {amaEnabled ? "Yes" : "No"}</span>
+              <span>Merch template enabled: {merchEnabled ? "Yes" : "No"}</span>
+              <span>Arena template enabled: {arenaEnabled ? "Yes" : "No"}</span>
+              {lastMessage ? <span>{lastMessage}</span> : null}
+              {lastDigest ? <span>Last digest: {lastDigest}</span> : null}
+            </div>
           </div>
+        </aside>
+      </section>
 
-          <div className="space-y-2 text-sm text-ink/68">
-            <p>Wallet: {account?.address ?? "Not connected"}</p>
-            <p>Package configured: {packageConfigured ? "Yes" : "No"}</p>
-            <p>zkLogin flag: {featureFlags.zkLogin ? "Enabled" : "Disabled"}</p>
-            <p>
-              Sponsored tx flag:{" "}
-              {featureFlags.sponsoredTransactions ? "Enabled" : "Disabled"}
+      <section className="mt-6 cs-section-frame p-5">
+        <div className="flex flex-wrap items-center justify-between gap-4">
+          <div>
+            <p className="cs-panel-label">Support Proof Actions</p>
+            <p className="mt-2 text-sm leading-6 text-white/58">
+              Default demo state is recognized. Live wallet mode submits the same proof
+              actions through the existing Sui transaction path.
             </p>
-            <p>
-              AMA countdown: {amaKey ? formatCountdown(amaKey.expiresAt) : "No AMA key"}
-            </p>
-            <p>AMA template enabled: {amaEnabled ? "Yes" : "No"}</p>
-            <p>Merch template enabled: {merchEnabled ? "Yes" : "No"}</p>
-            <p>Arena template enabled: {arenaEnabled ? "Yes" : "No"}</p>
-            {lastMessage ? <p>{lastMessage}</p> : null}
-            {lastDigest ? <p>Last digest: {lastDigest}</p> : null}
           </div>
-        </Card>
+          <span className="cs-status">Corner AMA Key unlocked</span>
+        </div>
 
-        <Card className="space-y-4">
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-coral">
-            Demo guide
-          </p>
-          <ul className="space-y-3 text-sm leading-6 text-ink/72">
-            <li>For the tightest demo, run Watch Check-in, Quiz Pass, then Corner AMA Key.</li>
-            <li>Use Venue Check-in and Arena Access only if you want to show the wider key set.</li>
-            <li>Use the Console route to enable or disable reward templates before the run.</li>
-            <li>Keep the language simple: proof is recognition, key is access.</li>
-          </ul>
-          {amaKey?.status === "unlocked" && amaAccess ? (
-            <Link href={`/access/${amaAccess.id}`}>
-              <Button variant="accent" className="mt-2">
-                Open AMA access now
-              </Button>
-            </Link>
-          ) : null}
-        </Card>
-      </div>
+        <div className="cs-actions-grid">
+          {proofCards.map((proof) => {
+            const ready = isRecognized(proofs, proof.id) || !account?.address;
 
-      <ProofList proofs={proofs} />
-    </div>
+            return (
+              <button
+                key={proof.id}
+                id={proof.id}
+                className="cs-card cs-action-card is-clickable text-left"
+                onClick={() => handleProofAction(proof.id, ready)}
+                disabled={isPending}
+              >
+                <header>
+                  <AssetIcon sheet="proof" index={proof.iconIndex} label={proof.title} />
+                  <span className="cs-status">Recognized</span>
+                </header>
+                <h3>{proof.title}</h3>
+                <p>{proof.copy}</p>
+                <div className="cs-action-meta">
+                  <span className="cs-pill">recognized</span>
+                  <span className="cs-pill">{proof.timestamp}</span>
+                </div>
+              </button>
+            );
+          })}
+        </div>
+      </section>
+
+      {accessOpened ? (
+        <div className="cs-modal-backdrop" role="dialog" aria-modal="true">
+          <div className="cs-modal">
+            <button
+              className="float-right text-white/58 transition hover:text-white"
+              aria-label="Close"
+              onClick={() => setAccessOpened(false)}
+            >
+              <X className="size-5" />
+            </button>
+            <p className="cs-panel-label">Access opened</p>
+            <h2>AMA Access opened.</h2>
+            <p>Your recognized support has unlocked Corner AMA Key access.</p>
+            {amaAccess ? (
+              <p className="mt-3 text-sm text-white/54">
+                {amaAccess.title}: {amaAccess.description}
+              </p>
+            ) : null}
+            <button className="cs-button mt-6 w-full" onClick={() => setAccessOpened(false)}>
+              Continue
+              <ArrowRight className="size-4" />
+            </button>
+          </div>
+        </div>
+      ) : null}
+    </CornerstonePageShell>
   );
 }

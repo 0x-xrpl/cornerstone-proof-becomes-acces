@@ -9,10 +9,10 @@ export function Badge({
   return (
     <span
       className={cn(
-        "inline-flex rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em]",
-        tone === "default" && "bg-ink/5 text-ink/70",
-        tone === "accent" && "bg-coral/10 text-coral",
-        tone === "success" && "bg-pine/10 text-pine"
+        "inline-flex rounded-full border px-3 py-1 text-[0.68rem] font-semibold uppercase tracking-[0.28em]",
+        tone === "default" && "border-line bg-white/[0.03] text-white/68",
+        tone === "accent" && "border-metal/30 bg-metal/10 text-metal",
+        tone === "success" && "border-pine/30 bg-pine/10 text-[#9dc69a]"
       )}
     >
       {children}

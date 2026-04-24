@@ -1,4 +1,4 @@
- "use client";
+"use client";
 
 import { CheckCircle2, ToggleLeft, ToggleRight } from "lucide-react";
 
@@ -16,25 +16,25 @@ export function TemplateList({
   return (
     <div className="grid gap-4 md:grid-cols-3">
       {templates.map((template) => (
-        <Card key={template.id}>
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-coral">
+        <Card key={template.id} className="panel-metal border-line/90">
+          <p className="eyebrow-label">
             {template.rewardType}
           </p>
-          <h3 className="mt-3 text-xl font-semibold text-ink">
+          <h3 className="mt-4 text-[1.45rem] font-semibold tracking-[-0.04em] text-white">
             {template.title}
           </h3>
-          <p className="mt-4 text-sm leading-6 text-ink/72">
+          <p className="mt-4 text-sm leading-6 text-white/64">
             Requirements: {template.requirementTypes.join(", ")}
           </p>
           <div className="mt-5 flex items-center justify-between gap-3">
-            <p className="text-sm text-ink/65">
+            <p className="text-sm uppercase tracking-[0.18em] text-white/48">
               Status: {template.active ? "Active" : "Draft"}
             </p>
             {onToggle ? (
               <Button
                 variant={template.active ? "secondary" : "accent"}
                 onClick={() => onToggle(template.id)}
-                className="px-3 py-1.5 text-xs"
+                className="px-3 py-2 text-[0.64rem]"
               >
                 {template.active ? (
                   <ToggleRight className="mr-1 size-4" />
@@ -46,7 +46,7 @@ export function TemplateList({
             ) : null}
           </div>
           {template.active ? (
-            <div className="mt-4 flex items-center gap-2 text-sm text-pine">
+            <div className="mt-4 flex items-center gap-2 text-sm text-[#9dc69a]">
               <CheckCircle2 className="size-4" />
               Next access path is available for proof-to-key unlocking.
             </div>

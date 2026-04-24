@@ -30,21 +30,21 @@ export function KeysSummaryCard() {
   );
 
   return (
-    <Card className="max-w-4xl">
-      <p className="text-xs font-semibold uppercase tracking-[0.2em] text-coral">
+    <Card className="panel-metal max-w-4xl border-line/90">
+      <p className="eyebrow-label">
         Key status
       </p>
-      <h3 className="mt-3 text-2xl font-semibold text-ink">
+      <h3 className="mt-4 text-[1.9rem] font-semibold tracking-[-0.04em] text-white">
         {unlockedCount} unlocked key{unlockedCount === 1 ? "" : "s"} in this wallet
       </h3>
-      <p className="mt-3 text-sm leading-6 text-ink/72">
+      <p className="mt-3 text-sm leading-7 text-white/64">
         This route is the bridge between recognized proof and the actual access
         screen. For the demo, the important moment is the `Corner AMA Key`.
       </p>
 
       {amaUnlocked && amaAccess ? (
         <div className="mt-5 flex flex-wrap items-center gap-3">
-          <div className="flex items-center gap-2 text-sm text-pine">
+          <div className="flex items-center gap-2 text-sm text-[#9dc69a]">
             <CheckCircle2 className="size-4" />
             Corner AMA Key is live and ready to open access.
           </div>

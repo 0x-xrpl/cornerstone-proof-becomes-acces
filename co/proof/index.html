@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CornerStone | Proof</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Teko:wght@400;500;600;700&family=Roboto+Condensed:wght@300;400;500;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../app.css" />
+  </head>
+  <body data-page="proof">
+    <main class="pixel-page page-proof" aria-label="CornerStone proof">
+      <div class="wallet-cover" data-wallet-cover>
+        <button type="button" data-connect><span></span><b>Wallet Connect</b><small>Not connected</small></button>
+        <em>⌁ Live Wallet Mode</em>
+      </div>
+      <nav class="hot-nav" aria-label="Primary">
+        <a class="nav-hot dashboard-hot" href="../"></a>
+        <a class="nav-hot proof-hot active" href="./"></a>
+        <a class="nav-hot access-hot" href="../access/"></a>
+        <a class="nav-hot squad-hot" href="../squad/"></a>
+        <button class="nav-hot console-hot" type="button" data-modal-trigger="console"></button>
+        <button class="nav-hot wallet-hot" type="button" data-connect></button>
+      </nav>
+
+      <button class="hot-card proof-watch" type="button" data-proof-action="watch"></button>
+      <button class="hot-card proof-venue" type="button" data-proof-action="venue"></button>
+      <button class="hot-card proof-quiz" type="button" data-proof-action="quiz"></button>
+      <button class="hot-card proof-ama" type="button" data-open-ama></button>
+
+      <div class="proof-mask mask-path-watch" data-mask="watch"></div>
+      <div class="proof-mask mask-path-venue" data-mask="venue"></div>
+      <div class="proof-mask mask-path-quiz" data-mask="quiz"></div>
+      <div class="proof-mask mask-key-row" data-mask="key"></div>
+      <div class="proof-mask mask-status" data-mask="status"></div>
+      <div class="proof-mask mask-card-watch" data-mask="watch"></div>
+      <div class="proof-mask mask-card-venue" data-mask="venue"></div>
+      <div class="proof-mask mask-card-quiz" data-mask="quiz"></div>
+      <div class="proof-mask mask-ama" data-mask="ama"></div>
+      <div class="demo-toast" data-toast></div>
+    </main>
+    <dialog class="cs-modal" data-modal><div><h2 data-modal-title></h2><p data-modal-body></p><button type="button" data-close-modal>Continue</button></div></dialog>
+    <script src="../app.js"></script>
+  </body>
+</html>
