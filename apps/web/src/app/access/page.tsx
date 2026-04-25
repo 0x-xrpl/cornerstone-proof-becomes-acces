@@ -1,5 +1,5 @@
-import { KeysLivePanel } from "@/features/keys/keys-live-panel";
+import { redirect } from "next/navigation";
 
-export default function AccessPage() {
-  return <KeysLivePanel />;
+export default function Page() {
+  redirect("/co/access/");
 }

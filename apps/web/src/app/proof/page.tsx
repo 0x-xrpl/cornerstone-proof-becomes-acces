@@ -1,5 +1,5 @@
-import { ProofLivePanel } from "@/features/proof/proof-live-panel";
+import { redirect } from "next/navigation";
 
-export default function ProofPage() {
-  return <ProofLivePanel />;
+export default function Page() {
+  redirect("/co/proof/");
 }

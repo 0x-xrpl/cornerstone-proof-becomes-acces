@@ -1,5 +1,5 @@
-import { ConsoleLivePanel } from "@/features/console/console-live-panel";
+import { redirect } from "next/navigation";
 
-export default function ConsolePage() {
-  return <ConsoleLivePanel />;
+export default function Page() {
+  redirect("/co/");
 }

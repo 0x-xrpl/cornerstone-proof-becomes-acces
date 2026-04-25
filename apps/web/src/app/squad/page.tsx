@@ -1,5 +1,5 @@
-import { SquadLivePanel } from "@/features/squads/squad-live-panel";
+import { redirect } from "next/navigation";
 
-export default function SquadPage() {
-  return <SquadLivePanel />;
+export default function Page() {
+  redirect("/co/squad/");
 }
