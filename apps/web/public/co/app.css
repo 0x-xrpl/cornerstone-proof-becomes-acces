@@ -40,23 +40,23 @@ a {
 }
 
 .page-dashboard {
-  background-image: url('./assets/final-reference/main-reference-desktop.png');
+  background-image: url('/co/assets/final-reference/main-reference-desktop.png');
 }
 
 .page-proof {
-  background-image: url('./assets/final-reference/support-proof-reference-desktop.png');
+  background-image: url('/co/assets/final-reference/support-proof-reference-desktop.png');
 }
 
 body[data-page='dashboard'] .page-dashboard {
-  background-image: url('./assets/final-reference/main-reference-desktop.png');
+  background-image: url('/co/assets/final-reference/main-reference-desktop.png');
 }
 
 .page-access {
-  background-image: url('./assets/final-reference/access-key-reference-desktop.png');
+  background-image: url('/co/assets/final-reference/access-key-reference-desktop.png');
 }
 
 .page-squad {
-  background-image: url('./assets/final-reference/unlock-path-reference-desktop.png');
+  background-image: url('/co/assets/final-reference/unlock-path-reference-desktop.png');
 }
 
 .hot-nav,
@@ -125,7 +125,7 @@ body[data-page='dashboard'] .page-dashboard {
 .dashboard-image-patch {
   position: absolute;
   z-index: 29;
-  background-image: url('./assets/new addition/main-header-wallet-connect-desktop.png');
+  background-image: url('/co/assets/new addition/main-header-wallet-connect-desktop.png');
   background-repeat: no-repeat;
   background-size: 1536px auto;
   pointer-events: none;
