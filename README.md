@@ -2,6 +2,20 @@
 
 ### Proof becomes access.
 
+## Language / 言語
+
+- [日本語版を読む](#日本語版-japanese)
+- [Read in English](#project-status)
+
+Quick links:
+
+- [MVP Scope](#mvp-scope)
+- [Demo Flow](#demo-flow)
+- [Technical Stack](#technical-stack)
+- [Repository Structure](#repository-structure)
+
+---
+
 CornerStone turns real fan support into recognized proof, and recognized proof into real access.
 
 Watching, attending, checking in at a venue, passing a quiz, or continuing to support an athlete should not disappear as a temporary reaction. CornerStone treats those actions as **Support Proof**. When the required proof is recognized, a **CornerKey** is unlocked.
@@ -528,7 +542,7 @@ It should open access.**
 
 ---
 
-## Japanese README
+## 日本語版 (Japanese)
 
 <details>
 <summary>日本語版はこちら</summary>
